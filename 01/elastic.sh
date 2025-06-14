@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker run -it --rm \
+docker run -d --rm \
   --name elasticsearch \
   -p 9200:9200 \
   -p 9300:9300 \
