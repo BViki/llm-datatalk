@@ -30,10 +30,16 @@ start_services() {
   done
   echo "[$(date)] Elasticsearch is up."
 
-  echo "[$(date)] Loading Elasticsearch indexes via Jupyter notebook..."
-  jupyter nbconvert --to notebook --execute /workspaces/llm-datatalk/01/Elastic_Indexes_Setup.ipynb \
-    --output /workspaces/llm-datatalk/01/Elastic_Indexes_Setup_output.ipynb >> "$LOGFILE" 2>&1
-  echo "[$(date)] Indexes loaded."
+  # Check if Elasticsearch has any indexes
+  INDEX_COUNT=$(curl -s http://localhost:9200/_cat/indices?h=index | wc -l)
+  if [ "$INDEX_COUNT" -eq 0 ]; then
+    echo "[$(date)] No indexes found. Loading Elasticsearch indexes via Jupyter notebook..."
+    jupyter nbconvert --to notebook --execute /workspaces/llm-datatalk/01/Elastic_Indexes_Setup.ipynb \
+      --output /workspaces/llm-datatalk/01/Elastic_Indexes_Setup_output.ipynb >> "$LOGFILE" 2>&1
+    echo "[$(date)] Indexes loaded."
+  else
+    echo "[$(date)] Indexes already exist. Skipping index setup."
+  fi
 
   echo "[$(date)] Starting Jupyter Notebook in background on port 8888..."
   nohup jupyter notebook --port=8888 --ip=0.0.0.0 --no-browser >> "$LOGFILE" 2>&1 &
