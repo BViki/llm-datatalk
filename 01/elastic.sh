@@ -1,5 +1,11 @@
 #!/bin/bash
-
+# Load .env file from parent directory if it exists
+ENV_FILE="$(dirname "$0")/../.env"
+if [ -f "$ENV_FILE" ]; then
+  set -o allexport
+  source "$ENV_FILE"
+  set +o allexport
+fi
 LOGDIR="$HOME/logs"
 mkdir -p "$LOGDIR"
 LOGFILE="$LOGDIR/elastic_$(date +'%Y%m%d_%H%M%S').log"

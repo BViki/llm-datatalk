@@ -3,4 +3,4 @@
 01/documents.json
 01/documents-llm.json
 01/Elastic_Indexes_Setup_output.ipynb
-01/elastic.sh
+.env
