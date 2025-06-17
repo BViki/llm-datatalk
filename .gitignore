@@ -5,4 +5,4 @@
 01/Elastic_Indexes_Setup_output.ipynb
 .env
 qdrant_storage/
-
+.vscode/tasks.json
