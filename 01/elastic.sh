@@ -1,9 +1,59 @@
 #!/bin/bash
 
-docker run -d --rm \
-  --name elasticsearch \
-  -p 9200:9200 \
-  -p 9300:9300 \
-  -e "discovery.type=single-node" \
-  -e "xpack.security.enabled=false" \
-  elasticsearch:8.17.6
+LOGDIR="$HOME/logs"
+mkdir -p "$LOGDIR"
+LOGFILE="$LOGDIR/elastic_$(date +'%Y%m%d_%H%M%S').log"
+exec > >(tee -a "$LOGFILE") 2>&1
+
+echo "[$(date)] Script started."
+
+start_services() {
+  echo "[$(date)] Starting Elasticsearch Docker container..."
+  docker run -d --rm \
+    --name elasticsearch \
+    -p 9200:9200 \
+    -p 9300:9300 \
+    -e "discovery.type=single-node" \
+    -e "xpack.security.enabled=false" \
+    elasticsearch:8.17.6
+
+  # Wait for Elasticsearch to be ready
+  echo "[$(date)] Waiting for Elasticsearch to be ready..."
+  until curl -s http://localhost:9200 >/dev/null; do
+    sleep 2
+  done
+  echo "[$(date)] Elasticsearch is up."
+
+  echo "[$(date)] Loading Elasticsearch indexes via Jupyter notebook..."
+  jupyter nbconvert --to notebook --execute /workspaces/llm-datatalk/01/Elastic_Indexes_Setup.ipynb \
+    --output /workspaces/llm-datatalk/01/Elastic_Indexes_Setup_output.ipynb >> "$LOGFILE" 2>&1
+  echo "[$(date)] Indexes loaded."
+
+  echo "[$(date)] Starting Jupyter Notebook in background on port 8888..."
+  nohup jupyter notebook --port=8888 --ip=0.0.0.0 --no-browser >> "$LOGFILE" 2>&1 &
+  echo "[$(date)] Jupyter Notebook started in background on port 8888."
+  echo "[$(date)] If using VS Code, use the 'Ports' panel to forward port 8888."
+}
+
+
+stop_services() {
+  echo "[$(date)] Stopping Jupyter Notebook..."
+  pkill -f "jupyter-notebook"
+
+  echo "[$(date)] Stopping Elasticsearch Docker container..."
+  docker stop elasticsearch
+}
+
+case "$1" in
+  start)
+    start_services
+    ;;
+  stop)
+    stop_services
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    ;;
+esac
+
+echo "[$(date)] Script finished."
