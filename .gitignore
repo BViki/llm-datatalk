@@ -4,3 +4,5 @@
 01/documents-llm.json
 01/Elastic_Indexes_Setup_output.ipynb
 .env
+qdrant_storage/
+

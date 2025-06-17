@@ -45,6 +45,17 @@ start_services() {
   nohup jupyter notebook --port=8888 --ip=0.0.0.0 --no-browser >> "$LOGFILE" 2>&1 &
   echo "[$(date)] Jupyter Notebook started in background on port 8888."
   echo "[$(date)] If using VS Code, use the 'Ports' panel to forward port 8888."
+
+  echo "[$(date)] Pulling Qdrant Docker image..."
+  docker pull qdrant/qdrant
+
+  echo "[$(date)] Starting Qdrant Docker container..."
+  docker run -d --rm \
+    --name qdrant \
+    -p 6333:6333 -p 6334:6334 \
+    -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
+    qdrant/qdrant
+  echo "[$(date)] Qdrant started on ports 6333 and 6334."
 }
 
 
@@ -54,6 +65,9 @@ stop_services() {
 
   echo "[$(date)] Stopping Elasticsearch Docker container..."
   docker stop elasticsearch
+
+  echo "[$(date)] Stopping Qdrant Docker container..."
+  docker stop qdrant
 }
 
 case "$1" in
