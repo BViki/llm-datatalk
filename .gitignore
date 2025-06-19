@@ -6,3 +6,4 @@
 .env
 qdrant_storage/
 .vscode/tasks.json
+logs/

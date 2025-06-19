@@ -6,7 +6,7 @@ if [ -f "$ENV_FILE" ]; then
   source "$ENV_FILE"
   set +o allexport
 fi
-LOGDIR="$HOME/logs"
+LOGDIR="$(pwd)/logs"
 mkdir -p "$LOGDIR"
 LOGFILE="$LOGDIR/elastic_$(date +'%Y%m%d_%H%M%S').log"
 exec > >(tee -a "$LOGFILE") 2>&1
