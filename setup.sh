@@ -56,6 +56,13 @@ start_services() {
     -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
     qdrant/qdrant
   echo "[$(date)] Qdrant started on ports 6333 and 6334."
+
+  # echo "[$(date)] Loading Qdrant Collections via Jupyter notebook..."
+  # jupyter nbconvert --to notebook --execute /workspaces/llm-datatalk/02/Load_Qdrant.ipynb \
+  #     --output /workspaces/llm-datatalk/02/Load_Qdrant.ipynb >> "$LOGFILE" 2>&1
+  # echo "[$(date)] Collections loaded."
+
+  echo "[$(date)] All services started successfully."
 }
 
 
