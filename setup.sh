@@ -6,7 +6,7 @@ if [ -f "$ENV_FILE" ]; then
   source "$ENV_FILE"
   set +o allexport
 fi
-# printenv | grep OPENAI_API_KEY
+export LLM_API_KEY=`echo $OPENAI_API_KEY`  
 LOGDIR="$(pwd)/logs"
 mkdir -p "$LOGDIR"
 LOGFILE="$LOGDIR/elastic_$(date +'%Y%m%d_%H%M%S').log"
