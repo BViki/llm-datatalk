@@ -9,3 +9,5 @@ qdrant_storage/
 logs/
 03/zoomcamp_pipeline.duckdb
 03/db.qdrant/
+quick_start.duckdb
+resource_source.duckdb
