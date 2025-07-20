@@ -2,3 +2,12 @@
 01/.ipynb_checkpoints/
 01/documents.json
 01/documents-llm.json
+01/Elastic_Indexes_Setup_output.ipynb
+.env
+qdrant_storage/
+.vscode/tasks.json
+logs/
+03/zoomcamp_pipeline.duckdb
+03/db.qdrant/
+quick_start.duckdb
+resource_source.duckdb
