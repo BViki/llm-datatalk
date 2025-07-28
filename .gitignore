@@ -11,3 +11,4 @@ logs/
 03/db.qdrant/
 quick_start.duckdb
 resource_source.duckdb
+04/__pycache__/
